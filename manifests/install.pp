@@ -6,7 +6,7 @@ class ucspi-tcp::install (
   if $pkg_tarball_name =~ /^(.*)\.tar\.gz$/ { $pkg_name = $1 }
 
   ## Sure, we'd like an rpm.  But there isn't one in the main distro's repo.
-  ## If you have an rpm (or deb, I guess) of daemontools, just uncomment this
+  ## If you have an rpm (or deb, I guess) of ucspi-tcp, just uncomment this
   ## and comment out the manual installation below.
 
   ## Simple package installation:
@@ -14,16 +14,16 @@ class ucspi-tcp::install (
   #    ensure => installed,
   #  }
 
-  ## Manual installation of daemontools
+  ## Manual installation of ucspi-tcp
 
   file {
-    "daemontools conf-cc":
+    "ucspi-tcp conf-cc":
       mode    => 644,
       owner   => root,
       group   => root,
       path    => "/usr/local/src/$pkg_name/conf-cc",
       source  => "puppet:///modules/ucspi-tcp/conf-cc",
-      require => Exec['get daemontools'];
+      require => Exec['get ucspi-tcp'];
   }
 
   exec {
