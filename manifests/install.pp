@@ -36,7 +36,7 @@ class ucspi-tcp::install (
       cwd     => "/usr/local/src/${pkg_name}",
       command => "make && make setup check",
       creates => '/usr/local/bin/tcpserver',
-      require => Exec['get ucspi-tcp'];
+      require => [Exec['get ucspi-tcp'], File['ucspi-tcp conf-cc']];
   }
 
   ## End manual installation
