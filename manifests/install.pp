@@ -1,5 +1,6 @@
 class ucspi-tcp::install (
-    $pkg_url = 'http://cr.yp.to/ucspi-tcp/ucspi-tcp-0.88.tar.gz'
+    $pkg_url = 'http://cr.yp.to/ucspi-tcp/ucspi-tcp-0.88.tar.gz',
+    $build_dir = '/usr/local/src',
   ){
 
   if $pkg_url =~ /^.*\/([^\/]*)$/ { $pkg_tarball_name = $1 }
@@ -21,21 +22,21 @@ class ucspi-tcp::install (
       mode    => 644,
       owner   => root,
       group   => root,
-      path    => "/usr/local/src/$pkg_name/conf-cc",
+      path    => "${build_dir}/$pkg_name/conf-cc",
       source  => "puppet:///modules/ucspi-tcp/conf-cc",
       require => Exec['get ucspi-tcp'];
   }
 
   exec {
     'get ucspi-tcp':
-      cwd     => '/usr/local/src',
-      command => "/usr/bin/wget -q ${pkg_url} && tar xpfz ${pkg_tarball_name} && rm /package/${pkg_tarball_name}",
-      creates => "/usr/local/src/${pkg_name}";
+      cwd     => "${build_dir}",
+      command => "/usr/bin/wget -q ${pkg_url} && tar xpfz ${pkg_tarball_name} && rm ${build_dir}/${pkg_tarball_name}",
+      creates => "${build_dir}/${pkg_name}";
 
     'install ucspi-tcp':
-      cwd     => "/usr/local/src/${pkg_name}",
+      cwd     => "${build_dir}/${pkg_name}",
       command => "make && make setup check",
-      creates => '/usr/local/bin/tcpserver',
+      creates => "/usr/local/bin/tcpserver",
       require => [Exec['get ucspi-tcp'], File['ucspi-tcp conf-cc']];
   }
 
